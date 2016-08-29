@@ -9,15 +9,10 @@
       <% scripts.each do |script| %>
         <li class="script">
           <p>
-            <%= script.fields[:title] %>
+            <a href="<%= script.fields[:slug] %>">
+              <%= script.fields[:title] %>
+            </a>
           </p>
-          <!--
-            <embed 
-              class="script-pdf"
-              src="<%= script.fields[:pdf].image_url %>" 
-              title="<%= script.fields[:title] %>" 
-              alt="<%= script.fields[:pdf].description %>" />
-          -->
         </li>
       <% end %>
     </ul>

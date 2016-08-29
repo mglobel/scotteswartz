@@ -1,0 +1,19 @@
+<%
+  script = content.entries(content_type: 'scripts').reverse_each.first
+%>
+<nav style='padding: 20px;'>
+  <a href='/'>Scott E. Swartz</a>
+</nav>
+<article style='width:100%; height:100vh'>
+  <object 
+    data="<%= script.fields[:pdf].image_url + '#toolbar=0&navpanes=0&scrollbar=0' %>"  + 
+    type="application/pdf" 
+    width="80%" 
+    height="100%">
+    <p>This browser does not support PDFs. Please download the PDF to view it: <a href="<%= script.fields[:pdf].image_url %>">Download PDF</a>.</p>
+  </object>
+</article>
+<footer style='text-align: center; padding: 20px;'>
+  <a href='/'>Return to Home</a>
+</footer>
+

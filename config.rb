@@ -1,4 +1,5 @@
 activate :autoprefixer
+activate :directory_indexes
 
 ###
 # Page options, layouts, aliases and proxies
