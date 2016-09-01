@@ -57,37 +57,44 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   PDFJS.getDocument("//assets.contentful.com/kn9v9w50wfaf/6xYDRnetwI8keSUas6ASek/b2b91dcc7bc145d445b3d93c7e9c7f35/The_Cold.pdf").then(function(pdf) {
     pdfFile = pdf
     numPages = pdf.numPages
-    pdf.getPage( 1 ).then( displayPages );
+    pdf.getPage( 1 ).then( displaySVGPages );
   });
 
-  function displayPages(page) {
-    //This gives us the page's dimensions at full scale
-    var viewport = page.getViewport(1);
 
-    //We'll create a canvas for each page to draw it on
-    var canvas = document.createElement('canvas');
-    var context = canvas.getContext('2d');
-    canvas.height = viewport.height;
-    canvas.width = viewport.width;
+  function displaySVGPages(page) {
+    // Set scale (zoom) level
+    var scale = 1;
 
-    //Draw it on the canvas
-    page.render({canvasContext: context, viewport: viewport});
+    // Get viewport (dimensions)
+    var viewport = page.getViewport(scale);
 
-    //Add it to the web page
-    document.body.appendChild(canvas);
+    // Get div#the-svg
+    var container = document.createElement('SVG');
+    document.body.appendChild(container);
+    
+    // Set dimensions
+    container.style.width = '100%';
+    container.style.height = '100%';
 
-    //Move to next page
+    // SVG rendering by PDF.js
+    page.getOperatorList()
+      .then(function (opList) {
+        var svgGfx = new PDFJS.SVGGraphics(page.commonObjs, page.objs);
+        return svgGfx.getSVG(opList, viewport);
+      })
+      .then(function (svg) {
+        container.appendChild(svg);
+      });
+
     currPage++
     if ( pdfFile !== null && currPage <= numPages ) {
-      pdfFile.getPage( currPage ).then( displayPages )
+      pdfFile.getPage( currPage ).then( displaySVGPages )
     } else {
       var footer = document.createElement("FOOTER")
-      console.log(footer)
       footer.innerHTML = "<a href='/'>Return to Home</a>"
       document.body.appendChild(footer);
     }
   }
-
 </script>
 
     <script src="/javascripts/all.js"></script>
